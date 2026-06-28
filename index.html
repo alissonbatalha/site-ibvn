@@ -8,6 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/png" href="assets/img/logo.png" />
+  <link rel="apple-touch-icon" href="assets/img/logo.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1a4a2e" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="IBVN" />
   <style>
     /* ================================================================
        IBVN Design System — CSS Custom Properties (BEM tokens)
@@ -97,7 +106,31 @@
     .navbar.is-scrolled .navbar__link{color:var(--color-text-muted)}
     .navbar.is-scrolled .navbar__link:hover{color:var(--color-primary)}
     .navbar__actions{display:flex;align-items:center;gap:var(--space-xs)}
-    .navbar__theme-toggle{background:none;border:none;cursor:pointer;width:36px;height:36px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8);font-size:var(--size-lg);transition:background-color var(--transition-base),color var(--transition-base)}
+    .navbar__theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.8);
+  font-size: var(--size-lg);
+  transition: background-color var(--transition-base), color var(--transition-base);
+  overflow: hidden;
+  position: relative;
+}
+.navbar__theme-toggle-icon {
+  display: inline-block;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+  transform: rotate(0deg) scale(1);
+}
+.navbar__theme-toggle-icon.is-switching {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
     .navbar.is-scrolled .navbar__theme-toggle{color:var(--color-text-muted)}
     .navbar__theme-toggle:hover{background-color:rgba(255,255,255,.15)}
     .navbar__hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
@@ -301,7 +334,9 @@
         <a href="#contato"     class="navbar__link">Contato</a>
       </nav>
       <div class="navbar__actions">
-        <button class="navbar__theme-toggle" id="themeToggle" aria-label="Alternar tema">🌙</button>
+        <button class="navbar__theme-toggle" id="themeToggle" aria-label="Alternar tema">
+          <span class="navbar__theme-toggle-icon" id="themeIcon">🌙</span>
+        </button>
         <button class="navbar__hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -724,10 +759,15 @@
   var themeToggle = document.getElementById('themeToggle');
   var THEME_KEY = 'ibvn-tema';
   function aplicarTema(tema) {
+    var icon = document.getElementById('themeIcon');
+  icon.classList.add('is-switching');
+  setTimeout(function() {
     html.setAttribute('data-theme', tema);
-    themeToggle.textContent = tema === 'dark' ? '☀️' : '🌙';
+    icon.textContent = tema === 'dark' ? '☀️' : '🌙';
     localStorage.setItem(THEME_KEY, tema);
-  }
+    icon.classList.remove('is-switching');
+  }, 200);
+}
   aplicarTema(localStorage.getItem(THEME_KEY) || 'light');
   themeToggle.addEventListener('click', function() {
     aplicarTema(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -874,6 +914,15 @@
 
   carregarDrive();
   document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  // Registra o Service Worker (PWA)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(reg) { console.log('[IBVN PWA] Service Worker registrado:', reg.scope); })
+        .catch(function(err) { console.warn('[IBVN PWA] Erro ao registrar SW:', err); });
+    });
+}
 </script>
 </body>
 </html>

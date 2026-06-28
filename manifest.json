@@ -1,0 +1,41 @@
+{
+  "name": "Igreja Batista Vida Nova",
+  "short_name": "IBVN",
+  "description": "Site oficial da Igreja Batista Vida Nova — Parque Santo Antônio, São Paulo.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a4a2e",
+  "theme_color": "#1a4a2e",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "assets/img/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/img/externo.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["lifestyle", "religion"]
+}
+
+
+
+
+
