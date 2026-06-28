@@ -156,6 +156,31 @@
     .navbar__mobile-link{font-family:var(--font-display);font-size:var(--size-2xl);font-weight:600;color:#fff;opacity:.9;transition:opacity var(--transition-base)}
     .navbar__mobile-link:hover{opacity:1}
 
+    .navbar__app-btn {
+      background: linear-gradient(135deg, var(--color-accent) 0%, #b5922e 100%);
+      color: #1a1a1a;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.10rem .4rem;
+      font-size: .7rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+    }
+    .navbar__app-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201,168,76,0.5);
+      background: linear-gradient(135deg, #b5922e 0%, var(--color-accent) 100%);
+    }
+    .navbar.is-scrolled .navbar__app-btn {
+      box-shadow: 0 2px 8px rgba(201,168,76,0.2);
+    }
+
     /* HERO */
     .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0d2818 0%,#1a4a2e 50%,#0a1f10 100%);overflow:hidden;padding:6rem 0 7rem}
     .hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 70% 30%,rgba(93,184,92,.08) 0%,transparent 60%),radial-gradient(circle at 20% 80%,rgba(201,168,76,.06) 0%,transparent 50%);pointer-events:none}
@@ -281,6 +306,22 @@
     .cta-section__subtitle{font-size:var(--size-lg);color:rgba(255,255,255,.7);margin-bottom:var(--space-lg);max-width:480px;margin-left:auto;margin-right:auto}
     .cta-section__actions{display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap}
 
+    /* DOWNLOAD APP */
+    .download-app { background-color: var(--color-primary); padding: var(--space-xl) 0; text-align: center; }
+    .download-app .section__eyebrow, .download-app .section__title { color: #fff; }
+    .download-app .section__title em { color: var(--color-accent); }
+    .download-app .section__subtitle { color: rgba(255,255,255,0.7); }
+    .download-app__content { max-width: 600px; margin: 0 auto; }
+    .download-app__btn { background-color: var(--color-accent); color: #1a1a1a; border-color: var(--color-accent); font-size: var(--size-lg); padding: 1.2rem 2.5rem; font-weight: 700; margin-bottom: var(--space-lg); display: inline-block; }
+    .download-app__btn:hover { background-color: #b5922e; transform: translateY(-3px); box-shadow: 0 10px 30px rgba(201,168,76,0.5); }
+    .download-app__steps { text-align: left; background-color: rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: var(--space-lg); margin-top: var(--space-lg); }
+    .download-app__step { display: flex; gap: var(--space-md); margin-bottom: var(--space-md); }
+    .download-app__step:last-child { margin-bottom: 0; }
+    .download-app__step-number { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background-color: var(--color-accent); color: #1a1a1a; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: var(--size-lg); }
+    .download-app__step-text { flex: 1; }
+    .download-app__step-text strong { display: block; color: #fff; font-weight: 600; margin-bottom: 4px; }
+    .download-app__step-text span { font-size: var(--size-sm); color: rgba(255,255,255,0.65); line-height: 1.5; }
+
     /* FOOTER */
     .footer{background-color:var(--color-primary);color:rgba(255,255,255,.85);padding:var(--space-xl) 0 var(--space-md)}
     .footer__grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:var(--space-xl);padding-bottom:var(--space-lg);border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:var(--space-md)}
@@ -334,6 +375,9 @@
         <a href="#contato"     class="navbar__link">Contato</a>
       </nav>
       <div class="navbar__actions">
+       <a href="#download-app" class="btn navbar__app-btn">
+          ⬇️ App
+      </a>
         <button class="navbar__theme-toggle" id="themeToggle" aria-label="Alternar tema">
           <span class="navbar__theme-toggle-icon" id="themeIcon">🌙</span>
         </button>
@@ -686,6 +730,55 @@
     <div class="cta-section__actions js-reveal js-reveal--delay-2">
       <a href="tel:+551158922990"                 class="btn btn--accent">📞 Ligar para a Igreja</a>
       <a href="mailto:ibavidanova290576@gmail.com" class="btn btn--outline">✉️ Enviar e-mail</a>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD APP -->
+<section class="download-app" id="download-app" aria-label="Baixar aplicativo">
+  <div class="container">
+    <div class="download-app__content js-reveal">
+      <span class="section__eyebrow">📱 App Disponível</span>
+      <h2 class="section__title">Tenha a IBVN <em>no seu celular.</em></h2>
+      <p class="section__subtitle">Baixe o aplicativo e acesse horários, eventos e informações da igreja diretamente da tela inicial do seu smartphone.</p>
+      
+      <a href="https://github.com/alissonbatalha/site-ibvn/releases/download/V1.0.0/Igreja.Batista.Vida.Nova.apk" class="btn download-app__btn" download>
+        ⬇️ Baixar App para Android
+      </a>
+
+      <div class="download-app__steps">
+        <div class="download-app__step js-reveal js-reveal--delay-1">
+          <div class="download-app__step-number">1</div>
+          <div class="download-app__step-text">
+            <strong>Clique no botão acima</strong>
+            <span>O arquivo será baixado automaticamente no seu smartphone.</span>
+          </div>
+        </div>
+
+        <div class="download-app__step js-reveal js-reveal--delay-2">
+          <div class="download-app__step-number">2</div>
+          <div class="download-app__step-text">
+            <strong>Permita a instalação</strong>
+            <span>O Android pode pedir permissão para instalar de "fontes desconhecidas". Vá em Configurações → Segurança → Permitir instalação de fontes desconhecidas.</span>
+          </div>
+        </div>
+
+        <div class="download-app__step js-reveal js-reveal--delay-3">
+          <div class="download-app__step-number">3</div>
+          <div class="download-app__step-text">
+            <strong>Abra o arquivo baixado</strong>
+            <span>Procure pelo arquivo "ibvn.apk" em Downloads e toque nele para iniciar a instalação.</span>
+          </div>
+        </div>
+
+        <div class="download-app__step js-reveal js-reveal--delay-3">
+          <div class="download-app__step-number">4</div>
+          <div class="download-app__step-text">
+            <strong>Pronto! 🎉</strong>
+            <span>O app está instalado. Procure pelo ícone "IBVN" na tela inicial ou gaveta de aplicativos.</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
