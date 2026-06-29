@@ -200,6 +200,16 @@
     @keyframes scrollDot{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(14px)}}
     @keyframes fadeInDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
+    /* VERSICULO DO DIA */
+    .versiculo-dia { background: linear-gradient(135deg, var(--color-primary) 0%, #0f3020 100%); padding: var(--space-xl) 0; position: relative; overflow: hidden; }
+    .versiculo-dia::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 80% 20%, rgba(201,168,76,0.08) 0%, transparent 60%); pointer-events: none; }
+    .versiculo-dia__content { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; text-align: center; }
+    .versiculo-dia__label { display: inline-block; font-size: var(--size-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-accent-soft); margin-bottom: var(--space-sm); }
+    .versiculo-dia__text { font-family: var(--font-display); font-size: var(--size-xl); font-style: italic; color: #fff; line-height: 1.7; margin-bottom: var(--space-md); min-height: 80px; display: flex; align-items: center; justify-content: center; }
+    .versiculo-dia__reference { font-size: var(--size-md); font-weight: 600; color: var(--color-accent); }
+    .versiculo-dia__translation { font-size: var(--size-xs); color: rgba(255,255,255,0.5); margin-top: 0.5rem; }
+    .versiculo-dia__loading { color: rgba(255,255,255,0.6); font-size: var(--size-sm); }
+
     /* MISSAO & VISAO */
     .missao-visao{background-color:var(--color-primary);padding:var(--space-lg) 0}
     .missao-visao__grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-lg)}
@@ -367,6 +377,7 @@
         </div>
       </a>
       <nav class="navbar__nav" aria-label="Navegação principal">
+        <a href="#versiculo-dia" class="navbar__link">Versículo do dia</a>
         <a href="#sobre"       class="navbar__link">Sobre</a>
         <a href="#pastor"      class="navbar__link">Pastor</a>
         <a href="#cultos"      class="navbar__link">Cultos</a>
@@ -390,6 +401,7 @@
 </header>
 
 <nav class="navbar__mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+  <a href="#versiculo-dia"       class="navbar__mobile-link" data-close-menu>Versículo do dia</a>
   <a href="#sobre"       class="navbar__mobile-link" data-close-menu>Sobre</a>
   <a href="#pastor"      class="navbar__mobile-link" data-close-menu>Pastor</a>
   <a href="#cultos"      class="navbar__mobile-link" data-close-menu>Cultos</a>
@@ -423,6 +435,18 @@
         <div class="hero__scroll-icon"></div>
         <span>SCROLL</span>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- VERSICULO DO DIA -->
+<section class="versiculo-dia" id="versiculo-dia" aria-label="Versículo do dia">
+  <div class="container">
+    <div class="versiculo-dia__content js-reveal">
+      <div class="versiculo-dia__label">✨ Versículo do Dia</div>
+      <div class="versiculo-dia__text" id="versiculoTexto">Carregando versículo...</div>
+      <div class="versiculo-dia__reference" id="versiculoReferencia"></div>
+      <div class="versiculo-dia__translation">Almeida Corrigida</div>
     </div>
   </div>
 </section>
@@ -1022,6 +1046,80 @@
         .catch(function(err) { console.warn('[IBVN PWA] Erro ao registrar SW:', err); });
     });
 }
+
+/* VERSICULO DO DIA — Bible API */
+async function carregarVersiculoDia() {
+  var cacheKey = 'ibvn-versiculo-' + new Date().toDateString();
+  var cached = localStorage.getItem(cacheKey);
+  
+  if (cached) {
+    var data = JSON.parse(cached);
+    exibirVersiculo(data);
+    return;
+  }
+  
+  try {
+    var livros = ['Romanos', 'Salmos', 'Provérbios', 'Mateus', 'João', 'Filipenses', '1 Pedro', 'Efésios'];
+    var livro = livros[Math.floor(Math.random() * livros.length)];
+    var capitulo = Math.floor(Math.random() * 30) + 1;
+    var versiculo = Math.floor(Math.random() * 20) + 1;
+    
+    var url = 'https://www.bible-api.com/' + livro + '+' + capitulo + ':' + versiculo + '?translation=almeida';
+    var resposta = await fetch(url);
+    var data = await resposta.json();
+    
+    if (data.text) {
+      localStorage.setItem(cacheKey, JSON.stringify(data));
+      exibirVersiculo(data);
+    }
+  } catch(erro) {
+    console.warn('[Versículo] Erro ao carregar:', erro);
+    document.getElementById('versiculoTexto').textContent = '"Porque dele e por ele, e para ele, são todas as coisas; glória, pois, a ele eternamente. Amém."';
+    document.getElementById('versiculoReferencia').textContent = 'Romanos 11.36';
+  }
+}
+
+/* VERSICULO DO DIA — Versículos Almeida */
+async function carregarVersiculoDia() {
+  var cacheKey = 'ibvn-versiculo-' + new Date().toDateString();
+  var cached = localStorage.getItem(cacheKey);
+  
+  if (cached) {
+    var data = JSON.parse(cached);
+    exibirVersiculo(data.text, data.reference);
+    return;
+  }
+  
+  try {
+    var versos = [
+      { reference: 'Romanos 11:36', text: 'Porque dele e por ele, e para ele, são todas as coisas; glória, pois, a ele eternamente. Amém.' },
+      { reference: 'Salmos 23:1', text: 'O Senhor é meu Pastor; nada me faltará.' },
+      { reference: 'Filipenses 4:13', text: 'Posso todas as coisas em Cristo que me fortalece.' },
+      { reference: 'João 3:16', text: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo aquele que nele crê não pereça, mas tenha a vida eterna.' },
+      { reference: 'Provérbios 3:5-6', text: 'Confia no Senhor de todo o teu coração, e não te estribes no teu próprio entendimento. Reconhece-o em todos os teus caminhos, e ele endireitará as tuas veredas.' },
+      { reference: 'Mateus 6:33', text: 'Mas buscai primeiro o reino de Deus, e a sua justiça, e todas estas coisas vos serão acrescentadas.' },
+      { reference: '1 Pedro 5:7', text: 'Lançando sobre ele toda a vossa ansiedade, porque ele tem cuidado de vós.' },
+      { reference: 'Efésios 2:8', text: 'Porque pela graça sois salvos, por meio da fé; e isto não vem de vós, é dom de Deus.' },
+      { reference: 'Salmos 37:5', text: 'Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará.' },
+      { reference: 'Jeremias 29:11', text: 'Porque eu bem sei os pensamentos que tenho a vosso respeito, diz o Senhor; pensamentos de paz, e não de mal, para vos dar um fim esperado.' }
+    ];
+    
+    var verso = versos[Math.floor(Math.random() * versos.length)];
+    localStorage.setItem(cacheKey, JSON.stringify(verso));
+    exibirVersiculo(verso.text, verso.reference);
+  } catch(erro) {
+    console.warn('[Versículo] Erro:', erro);
+    exibirVersiculo('Porque dele e por ele, e para ele, são todas as coisas; glória, pois, a ele eternamente. Amém.', 'Romanos 11.36');
+  }
+}
+
+function exibirVersiculo(texto, referencia) {
+  document.getElementById('versiculoTexto').textContent = '"' + texto + '"';
+  document.getElementById('versiculoReferencia').textContent = referencia;
+}
+
+carregarVersiculoDia();
+
 </script>
 </body>
 </html>
